@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <title>ConcoGrades</title>
+
+  <link rel="icon" href="/static/Media/logoNoName.ico" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="/static/Home.css">
+</head>
+
+<body>
+
+  <header class="topBarSpecs navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="/student/Home">
+      <img id="homeButtonLogo" src="/static/Media/LogoWithName_transparent.png" alt="Conco Home Logo">
+    </a>
+    <div style="padding-right: 1%;" class="navbar-nav">
+      <div class="nav-item text-nowrap">
+        <a class="btn btn-sm btn-primary" href="/Logout" style="color:white;"><i>Sign out</i></a>
+      </div>
+    </div>
+  </header>
+
+  <div class="container-fluid">
+    <div class="row">
+      <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+        <div class="position-fixed pt-3 sidebar-sticky">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/student/Home">
+                <span data-feather="home" class="align-text-bottom"></span>
+                Home
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/student/Announcements">
+                <span data-feather="alert-circle" class="align-text-bottom"></span>
+                Announcements
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/student/ClassList">
+                <span data-feather="users" class="align-text-bottom"></span>
+                Class List
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/student/StudentReportCard">
+                <span data-feather="award" class="align-text-bottom"></span>
+                My Grades
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/student/ClassReportCard">
+                <span data-feather="bar-chart-2" class="align-text-bottom"></span>
+                Class Report Card
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/student/ContactUs">
+                <span data-feather="phone" class="align-text-bottom"></span>
+                Contact Us
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div
+          class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">Class Report Card</h1>
+          <br>
+        </div>
+        <div align="center">
+          <br>
+          <br>
+          <canvas id="myChart" style="width:100%; max-width:750px; max-height:350px;"></canvas>
+          <br>
+          <button id="total" type="button" class="classlist-button btn btn-secondary m-1" onclick="changeData('total')">Total</button>
+          <button id="a1" type="button" class="classlist-button btn btn-outline-secondary m-1" onclick="changeData('a1')">A1</button>
+          <button id="a2" type="button" class="classlist-button btn btn-outline-secondary m-1" onclick="changeData('a2')">A2</button>
+          <button id="a3" type="button" class="classlist-button btn btn-outline-secondary m-1" onclick="changeData('a3')">A3</button>
+          <button id="midterm" type="button" class="classlist-button btn btn-outline-secondary m-1" onclick="changeData('midterm')">Midterm</button>
+          <button id="final" type="button" class="classlist-button btn btn-outline-secondary m-1" onclick="changeData('final')">Final</button>
+      </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+  integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+  crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
+    integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
+    crossorigin="anonymous"></script>
+  <script src="/static/Home.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+
+  <script>
+    const ctx = document.getElementById('myChart');
+    let increment = 10;
+    let columns = (100 / increment) + 1;
+
+    var chartdata = {{ chartdata | tojson | safe }};
+    var subtitledict = {{ subtitledict | tojson | safe }};
+    var assessment_names = {
+      "a1": "Assignment 1",
+      "a2": "Assignment 2",
+      "a3": "Assignment 3",
+      "midterm": "Midterm",
+      "final": "Final",
+      "total": "Total",
+    }
+
+    function changeData(datatype) {
+        chart.config.options.plugins.title.text = assessment_names[datatype];
+        chart.config.options.plugins.subtitle.text = subtitledict[datatype];
+        chart.config.data.datasets[0].data = chartdata[datatype];
+        chart.update();
+
+        let buttons = document.getElementsByClassName("classlist-button");
+        for (i = 0; i < buttons.length; i++) {
+          buttons[i].classList.remove("btn-secondary");
+          buttons[i].classList.add("btn-outline-secondary");
+        }
+
+        document.getElementById(datatype).classList.add("btn-secondary");
+        document.getElementById(datatype).classList.remove("btn-outline-secondary");
+    }
+
+    var labels = [];
+    var tooltip = [];
+    for (i = 0; i < columns; i++) {
+        const current = i * increment;
+        labels[i] = current + '%';
+        if (current == 0) {
+            tooltip[i] = "0% - " + (increment/2) + "%";
+        }
+        else if (current == 100) {
+            tooltip[i] = (100-(increment/2)) +"% - 100%";
+        }
+        else {
+            tooltip[i] = (current - (increment/2)) + "% - " + (current + (increment/2)) + "%";
+        }
+    }
+
+    var chart = new Chart(ctx, {
+        data: {
+            labels: labels,
+            datasets: [{
+                type: 'bar',
+                label: 'Students',
+                data: chartdata["total"],
+                backgroundColor: '#4682b4',
+                barPercentage: .85,
+                categoryPercentage: 1,
+            }]
+        },
+        options: {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: (data) => {
+                            var current = data[0].parsed.x;
+                            return tooltip[current];
+                        },
+                        label: (data) => {
+                          let students = data.parsed.y
+                          if (students == 1) {
+                            return "1 student";
+                          }
+                          return  students + " students";
+                        }
+                    },
+                },
+                legend: { display: false },
+                title: {
+                    fullSize: true,
+                    display: true,
+                    text: assessment_names["total"],
+                    font: {
+                        size: 25,
+                    }
+                },
+                subtitle: {
+                  display: true,
+                  text: subtitledict["total"],
+                  padding: { bottom: 50}
+                }
+            },
+            scales: {
+              x: {
+                grid: {
+                  display:false,
+                }
+              },
+              y: { 
+                display: false
+              },
+            }
+        }
+    });
+  </script>
+
+</body>
+
+</html>

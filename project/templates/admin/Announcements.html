@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <title>ConcoGrades</title>
+  <link rel="icon" href="/static/Media/logoNoName.ico" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="/static/Home.css">
+</head>
+
+<body>
+
+  <header class="topBarSpecs navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="/admin/Home">
+      <img id="homeButtonLogo" src="/static/Media/LogoWithName_transparent.png" alt="Conco Home Logo">
+    </a>
+    <div style="padding-right: 1%;" class="navbar-nav">
+      <div class="nav-item text-nowrap">
+        <a class="btn btn-sm btn-primary" href="/Logout" style="color:white;"><i>Sign out</i></a>
+      </div>
+    </div>
+  </header>
+
+  <div class="container-fluid">
+    <div class="row">
+      <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+        <div class="position-fixed pt-3 sidebar-sticky">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/admin/Home">
+                <span data-feather="home" class="align-text-bottom"></span>
+                Home
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/admin/Announcements">
+                <span data-feather="alert-circle" class="align-text-bottom"></span>
+                Announcements
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/ClassList">
+                <span data-feather="users" class="align-text-bottom"></span>
+                Class List
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/EnrollStudent">
+                <span data-feather="edit" class="align-text-bottom"></span>
+                Enroll Student
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/StudentReportCard">
+                <span data-feather="award" class="align-text-bottom"></span>
+                Student Report Card
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/ClassReportCard">
+                <span data-feather="bar-chart-2" class="align-text-bottom"></span>
+                Class Report Card
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/ContactUs">
+                <span data-feather="phone" class="align-text-bottom"></span>
+                Contact Us
+              </a>
+            </li>
+          </ul>
+
+        </div>
+      </nav>
+
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <form id="deleteAnnForm" action="Announcements" method="post">
+        <div
+          class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">Announcements</h1>
+          <div>
+            <div id="defaultState" class="btn-group me-2">
+              <a href="#msgDiv"><input type="button" class="btn btn-sm btn-outline-secondary"
+                  value="Add a new announcement" onClick="addAnn()" /></a>
+              <input id="delAnn" type="button" class="btn btn-sm btn-outline-secondary" value="Delete an announcement"
+                onClick="deleteAnn()" />
+            </div>
+            <div id="editState" class="btn-group me-2" hidden>
+              <input type="submit" class="btn btn-sm btn-outline-secondary" id="confirmDel" value="Confirm" />
+              <input type="button" class="btn btn-sm btn-outline-secondary" value="Cancel"
+                onClick="cancle()" />
+            </div>
+          </div>
+        </div>
+        <p hidden id="delMsg">Check the circle next to an announcement then click on "Confirm" to delete it:</p>
+        <br>
+
+        {% for announcement in announcements %}
+        <div class="bg-light p-5 rounded">
+          <div class="d-flex align-items-center" style="display: inline-block;">
+            <input hidden type="checkbox" name="{{announcement.announcement_id}}" class="delBox">
+            <div style="display: inline-block; margin-left: 5%;">
+              <p id="checkEmpty" class="lead text-break"><b> Announcement on {{announcement.formatted_announcement_date}}:<b>
+                    <br>
+                    {{ announcement.announcement_text }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <br>
+        {% endfor %}
+        </form>
+
+        <div id="addAnnDiv" class="bg-light p-5 rounded" hidden>
+          <form id="addAnnForm" action="Announcements" hidden method="post">
+            <div id="msgDiv" class="form-group">
+              <input type="date" name="date" id="datePicker" class="form-control" readonly autofocus> <br>
+              <input type="text" name="announcement" id="textPicker" class="form-control"
+                placeholder="Enter announcement message" required autofocus>
+            </div>
+            <button type="submit" class="btn btn-primary">Post Announcement</button>
+          </form>
+        </div>
+
+      </main>
+    </div>
+  </div>
+  
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
+    integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
+    crossorigin="anonymous"></script>
+  <script src="/static/Home.js"></script>
+  <script>
+    document.getElementById('delAnn').hidden = true;
+
+    let announcement = document.getElementById('checkEmpty').innerHTML;
+    if (announcement != null) {
+      document.getElementById('delAnn').hidden = false;
+    }
+
+    function addAnn() {
+      var now = new Date();
+      var utc = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
+      document.getElementById('datePicker').valueAsDate = utc;
+      document.getElementById('addAnnDiv').hidden = false;
+      document.getElementById('addAnnForm').hidden = false;
+      document.getElementById('editState').hidden = false;
+      document.getElementById('defaultState').hidden = true;
+      document.getElementById('confirmDel').hidden = true;
+    }
+
+    function deleteAnn() {
+      document.getElementById('editState').hidden = false;
+      document.getElementById('defaultState').hidden = true;
+      document.getElementById('delMsg').hidden = false;
+
+      delBox = document.getElementsByClassName('delBox');
+      for (let i = 0; i < delBox.length; i++) {
+        delBox[i].hidden = false;
+        delBox[i].disabled = false;
+      }
+    }
+
+    function cancle() {
+      location.reload();
+    }
+  </script>
+
+
+</body>
+
+
+</html>

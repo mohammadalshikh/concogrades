@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <title>ConcoGrades</title>
+  <link rel="icon" href="/static/Media/logoNoName.ico" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="/static/EnrollStudent.css">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+
+</head>
+
+<body>
+
+  <header class="topBarSpecs navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="/admin/Home">
+      <img id="homeButtonLogo" src="/static/Media/LogoWithName_transparent.png" alt="Conco Home Logo">
+    </a>
+    <div style="padding-right: 1%;" class="navbar-nav">
+      <div class="nav-item text-nowrap">
+        <a class="btn btn-sm btn-primary" href="/Logout" style="color:white;"><i>Sign out</i></a>
+      </div>
+    </div>
+  </header>
+
+  <div class="container-fluid">
+    <div class="row">
+      <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+        <div class="position-fixed pt-3 sidebar-sticky">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/admin/Home">
+                <span data-feather="home" class="align-text-bottom"></span>
+                Home
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/Announcements">
+                <span data-feather="alert-circle" class="align-text-bottom"></span>
+                Announcements
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/ClassList">
+                <span data-feather="users" class="align-text-bottom"></span>
+                Class List
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/admin/EnrollStudent">
+                <span data-feather="edit" class="align-text-bottom"></span>
+                Enroll Student
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/StudentReportCard">
+                <span data-feather="award" class="align-text-bottom"></span>
+                Student Report Card
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/ClassReportCard">
+                <span data-feather="bar-chart-2" class="align-text-bottom"></span>
+                Class Report Card
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/ContactUs">
+                <span data-feather="phone" class="align-text-bottom"></span>
+                Contact Us
+              </a>
+            </li>
+          </ul>
+
+        </div>
+      </nav>
+
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <form id="form1" autocomplete="off" action="EnrollStudent" method="post" class="form-group">
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Enroll Student</h1>
+              </div>
+              
+              <!-- basically take out this next div and instead do a 2 seperate divs for each form, to put them next to each other!!! -->
+                <label>Student ID:</label>
+                <input type="text" name="id" class="form-control" pattern="[0-9]+" autofocus required />
+                <br /> <br />
+                <label>First Name:</label>
+                <input type="text" name="fname" class="form-control" autofocus required />
+                <br /> <br />
+                <label>Last Name:</label>
+                <input type="text" name="lname" class="form-control" autofocus required />
+                <br /> <br />
+                <label>Password:</label>
+                <input type="password" name="password" class="form-control" id="password" required />
+                </br> </br>
+            </div>
+            <div class="col">
+              <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Grade Input</h1>
+              </div>
+              
+                <label>Assignment 1:</label>
+                <input type="number" min="0" max="100" step="0.01" name="a1" class="form-control" />
+                <br /> <br />
+                <label>Assignment 2:</label>
+                <input type="number" min="0" max="100" step="0.01" name="a2" class="form-control" />
+                <br /> <br />
+                <label>Assignment 3:</label>
+                <input type="number" min="0" max="100" step="0.01" name="a3" class="form-control" />
+                <br /> <br />
+                <label>Midterm Exam:</label>
+                <input type="number" min="0" max="100" step="0.01" name="midterm" class="form-control" />
+                <br /> <br />
+                <label>Final Exam:</label>
+                <input type="number" min="0" max="100" step="0.01" name="final" class="form-control" />
+                <br /> <br />
+              
+            </div>
+          </div>
+          
+          <center>
+            <!-- error and success messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <p class="{{ category }}">{{ message }}</p>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+            <p><input class="btn btn-primary align-self-center" type="submit" name="submit" value="Submit"/></p>
+          </center>
+          <br>
+        </form>
+        </div>
+        
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Enroll students using file drop:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+               <strong>File format/content restrictions:</strong> <br>- File drop accepts <strong>.txt</strong> files only. <br>- Entries cannot be assessment grades (student's personal info only). <br>- Entries must be in order: <strong>Student ID</strong>, <strong>First name</strong>, <strong>Last name</strong>, <strong>Password</strong>. <br> - Entries must be seperates by a space or tab. <br><br> <strong>Example:</strong> <br><br> <h5><pre>  123456 First Second xf38d12</pre></h5><strong> How to upload: </strong> <br>1- Save the file on your local drive. <br> 2- Upload the file containing students info then click "Upload Text File". <br> <br>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <form action="" method="post" id="myForm" enctype='multipart/form-data'>
+          <br>
+          <div class="drop-zone">
+            <span class="drop-zone__prompt">Drop class list file here or click to upload</span>
+            <input type="file" name="file" class="drop-zone__input" accept=".txt" required>
+          </div>
+          <br>
+          <center>
+            <span>
+              <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModalCenter">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                  <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                </svg>
+              </button>
+              <input class="btn btn-primary align-self-center" type="submit" name="submit" value="Upload Text File"/>
+            </span>
+          </center>
+        </form>
+
+
+      </main>
+
+    </div>
+  </div>
+
+  <script src="/static/EnrollStudents.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
+    integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
+    crossorigin="anonymous"></script>
+  <script src="/static/Home.js"></script>
+  <script>
+  $('#myModal').on('shown.bs.modal', function () {
+    $('#myInput').trigger('focus')
+  })
+  </script>
+
+
+</body>
+</html>

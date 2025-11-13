@@ -1,4 +1,4 @@
-# Classroom Management Website - Python Flask
+# ConcoGrades - Python Flask
 Source code belongs to a school project done back in 2022.
 
 ## How to run
